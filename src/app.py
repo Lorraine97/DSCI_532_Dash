@@ -63,19 +63,18 @@ app.layout = dbc.Container([
                     html.Hr(),
                 ]),
                 html.Div([
-                    html.Img(src="images/temperature.svg", height=15),
                     dcc.RadioItems(
                         options=[
                             {
                                 "label": [
-                                    html.Img(src="images/temperature.svg", height=15),
+                                    html.Img(src=app.get_asset_url("temperature.svg"), height=15),
                                     html.Span("Temperature", style={'font-size': 15, 'padding-left': 10}),
                                 ],
                                 "value": "MEAN_TEMP_C"
                             },
                             {
                                 "label": [
-                                    html.Img(src="images/precipitation.png", height=15),
+                                    html.Img(src=app.get_asset_url("precipitation.svg"), height=15),
                                     html.Span("Precipitation", style={'font-size': 15, 'padding-left': 10}),
                                 ],
                                 "value": "TOTAL_PERCIP_mm"
@@ -83,6 +82,7 @@ app.layout = dbc.Container([
                         ],
                         value='MEAN_TEMP_C',
                         id='data-option',
+                        labelStyle={"display": "flex", "align-items": "center"},
                     ),
                     
                     html.Hr(),
@@ -121,7 +121,7 @@ app.layout = dbc.Container([
 def update_geo_year_options(year_start, year_end):
     if not year_start: year_start = min(year_range)
     if not year_end: year_end = max(year_range)
-    return year_range[(year_range >= year_start) | (year_range >= year_end)]
+    return year_range[(year_range >= year_start) & (year_range <= year_end)]
 
 
 @app.callback(
@@ -188,6 +188,7 @@ def plot_temp_prec(geo_year, data_option):
         text=df['CITY'],
         mode='markers',
         marker=dict(
+            size=12,
             opacity=0.8,
             color=df[data_option],
             colorscale=color_scale,
