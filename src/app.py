@@ -111,7 +111,7 @@ app.layout = dbc.Container([
         )
     ])
 ])
-
+server = app.server
 
 @app.callback(
     Output("geo-year", "options"),
